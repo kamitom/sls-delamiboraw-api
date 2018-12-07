@@ -8,6 +8,8 @@ provider:
   name: aws
   runtime: nodejs8.10
   profile: tomrd
+  stage: dev
+  region: us-east-1
 
 functions:
   graphql:

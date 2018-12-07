@@ -18,7 +18,7 @@ exports.delamiboitems = (event, context, callback) => {
 		case 'helloWorld': {
 
 			// callback(null, `hello: ${consumer_Key}, this is sec: ${consumer_secret}`);
-			callback(null, {'test:': 'response ok?', 'key is:': consumer_Key});
+			callback(null, {'test': 'response ok?', 'key': consumer_Key});
 			break;
 		}
 
@@ -34,7 +34,6 @@ exports.delamiboitems = (event, context, callback) => {
 				apiVersion: '2012-08-10'
 			});
 			
-			
 			let mobile_sub2;
 			let device_sub2;
 			const params5 = {
@@ -44,25 +43,25 @@ exports.delamiboitems = (event, context, callback) => {
 			
 			console.log('show params5: ', params5);
 
-			client.listUsers(params5, (err, data5) => {
+			client.listUsers(params5, (err, cogUsrData) => {
 
 				if (err) {
 					console.error('errors: ' , err.message);
 					callback(null, {'x2 error msg: ': err.message, 'param5: ': params5});
 					return;
 				} else {
-					console.log('show data5: ', JSON.stringify(data5, null, 2));
+					console.log('show data5: ', JSON.stringify(cogUsrData, null, 2));
 
-					const UserExists = (data5.Users.length);
+					const UserExists = (cogUsrData.Users.length);
 					if (UserExists > 0) {
-						for (let i = 0; i < data5.Users.length; i++) {
-							let cognitoUsername = data5.Users[i].Username;
+						for (let i = 0; i < cogUsrData.Users.length; i++) {
+							let cognitoUsername = cogUsrData.Users[i].Username;
 							if (cognitoUsername.startsWith('device')) {
 								// device_sub2 = 'Device-' + data5.Users[i].Attributes[1].Value;  //todo: 在正式區
-								device_sub2 = 'Device-' + data5.Users[i].Attributes[0].Value;  //todo: 在tomrd
+								device_sub2 = 'Device-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
 							} else {
 								// mobile_sub2 = 'MobileUser-' + data5.Users[i].Attributes[1].Value;  //todo: 在正式區
-								mobile_sub2 = 'MobileUser-' + data5.Users[i].Attributes[0].Value;  //todo: 在tomrd
+								mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
 							}
 			
 						}
@@ -158,7 +157,7 @@ exports.delamiboitems = (event, context, callback) => {
 										//         console.log("delete Device - PK - succeeded:", JSON.stringify(data, null, 2));
 										//     }
 										// });
-										callback(null, {"mobile:": cognitoUsr, "device_sub:": device_sub2, "status": 'deleted!'});
+										callback(null, {"mobile": cognitoUsr, "device_sub": device_sub2, "status": 'deleted!'});
 									} else 
 									{
 										callback(null, {'no device reord': 0});
@@ -263,6 +262,7 @@ exports.delamiboitems = (event, context, callback) => {
 									}
 								}
 							});
+							callback(null, {'phone': cognitoUsr, 'all items': 'deleted!!'});
 						}
 						
 					}
