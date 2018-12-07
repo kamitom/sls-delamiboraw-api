@@ -1,0 +1,12 @@
+type Mutation {
+	delAmiboRawItems2(phone: String!): String
+}
+
+type Query {
+	helloWorld(consumer_key: String, consumer_secret: String): String
+}
+
+schema {
+	query: Query
+    mutation: Mutation
+}
