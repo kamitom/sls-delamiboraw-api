@@ -27,7 +27,7 @@ custom:
     mappingTemplates:
       - dataSource: awsLambdaDataSource
         type: Mutation #Query, Mutation, Subscription
-        field: delAmiboRawItems2
+        field: delAmiboRawItems3
         request: "delamiboraw-request-mapping-template.txt"
         response: "delamiboraw-response-mapping-template.txt"
     schema: # defaults schema.graphql

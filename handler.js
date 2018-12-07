@@ -22,7 +22,7 @@ exports.delamiboitems = (event, context, callback) => {
 			break;
 		}
 
-		case 'delAmiboRawItems2': {
+		case 'delAmiboRawItems3': {
 
 			let Target_table = "dev2";
 			// let Target_table = 'AmiboTb-Test-Tom2';
