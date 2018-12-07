@@ -7,7 +7,7 @@ plugins:
 provider:
   name: aws
   runtime: nodejs8.10
-  profile: tomrd
+  profile: sls-admin
   stage: dev
   region: us-east-1
 
