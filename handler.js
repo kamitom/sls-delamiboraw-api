@@ -24,7 +24,7 @@ exports.delamiboitems = (event, context, callback) => {
 
 		case 'delAmiboRawItems2': {
 
-			let Target_table = "AmiboTable-Dev2";
+			let Target_table = "Dev1";
 			// let Target_table = 'AmiboTb-Test-Tom2';
 
 			let cognitoUsr = event.arguments.phone;
@@ -262,7 +262,7 @@ exports.delamiboitems = (event, context, callback) => {
 									}
 								}
 							});
-							callback(null, {'phone': cognitoUsr, 'all items': 'deleted!!'});
+							// callback(null, {'phone': cognitoUsr, 'all items': 'deleted!!'});
 						}
 						
 					}
