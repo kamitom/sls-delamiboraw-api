@@ -1,9 +1,10 @@
 'use strict';
 const AWS = require('aws-sdk');
 
+//todo: cognito region need modify: ap-southeast-1
 const client = new AWS.CognitoIdentityServiceProvider({
 	apiVersion: '2016-04-19',
-	region: 'us-east-1'
+	region: 'us-east-2'
 });
 
 
@@ -22,13 +23,15 @@ exports.delamiboitems = (event, context, callback) => {
 			break;
 		}
 
-		case 'delAmiboRawItems3': {
+		case 'delAmiboRawItems4': {
 
+			//todo: dynamodb table name need modify: AmiboTable-Dev
 			let Target_table = "Dev1";
 			// let Target_table = 'AmiboTb-Test-Tom2';
 
 			let cognitoUsr = event.arguments.phone;
 
+			//todo: dynamodb region need modify: ap-southeast-1
 			const dynamodb = new AWS.DynamoDB({
 				region: 'us-east-1',
 				apiVersion: '2012-08-10'
@@ -37,7 +40,7 @@ exports.delamiboitems = (event, context, callback) => {
 			let mobile_sub2;
 			let device_sub2;
 			const params5 = {
-				'UserPoolId': 'us-east-1_mi3ZL9deF', // tomrd: us-east-1_mi3ZL9deF
+				'UserPoolId': 'us-east-2_VdUFUH85R', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH
 				'Filter': `phone_number=\"+${event.arguments.phone}\"` // equals
 			};
 			

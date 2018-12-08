@@ -3,64 +3,64 @@
         {
             "PutRequest": {
                 "Item": {
-                    "PK": {"S":"Device-1984f205-9e86-4857-8e4e-2cfe5996ce5a"},
-                    "SK": {"S":"Device-1984f205-9e86-4857-8e4e-2cfe5996ce5a"}
+                    "PK": {"S":"Device-57a647fe-aefa-4631-b7b3-08f9e0fd471c"},
+                    "SK": {"S":"Device-57a647fe-aefa-4631-b7b3-08f9e0fd471c"}
                 }
             }
         },
         {
             "PutRequest": {
                 "Item": {
-                    "PK": {"S":"Device-1984f205-9e86-4857-8e4e-2cfe5996ce5a"},
-                    "SK": {"S":"device phone 307 user"}
+                    "PK": {"S":"Device-57a647fe-aefa-4631-b7b3-08f9e0fd471c"},
+                    "SK": {"S":"device phone 8033 user"}
                 }
             }
         },
         {
             "PutRequest": {
                 "Item": {
-                    "PK": {"S":"Device-f0a1e634-1d58-4a9f-a246-4a83b6f65017"},
-                    "SK": {"S":"Device-f0a1e634-1d58-4a9f-a246-4a83b6f65017"}
+                    "PK": {"S":"Device-d4417c9a-1dba-4e60-a7ac-78c2372d7d93"},
+                    "SK": {"S":"Device-d4417c9a-1dba-4e60-a7ac-78c2372d7d93"}
                 }
             }
         },
         {
             "PutRequest": {
                 "Item": {
-                    "PK": {"S":"Device-f0a1e634-1d58-4a9f-a246-4a83b6f65017"},
-                    "SK": {"S":"device-308 phohe"}
+                    "PK": {"S":"Device-d4417c9a-1dba-4e60-a7ac-78c2372d7d93"},
+                    "SK": {"S":"device-8034  phohe"}
                 }
             }
         },
         {
             "PutRequest": {
                 "Item": {
-                    "PK": {"S":"MobileUser-122b530f-41eb-43c0-8c7d-37183e9d99df"},
-                    "SK": {"S":"MobileUser-122b530f-41eb-43c0-8c7d-37183e9d99df"}
+                    "PK": {"S":"MobileUser-69d10799-b8a4-4c43-9d39-0e00f6f5eae8"},
+                    "SK": {"S":"MobileUser-69d10799-b8a4-4c43-9d39-0e00f6f5eae8"}
                 }
             }
         },
         {
             "PutRequest": {
                 "Item": {
-                    "PK": {"S":"MobileUser-122b530f-41eb-43c0-8c7d-37183e9d99df"},
-                    "SK": {"S":"mobile 307 phone data 1"}
+                    "PK": {"S":"MobileUser-69d10799-b8a4-4c43-9d39-0e00f6f5eae8"},
+                    "SK": {"S":"mobile 8033 phone data 1"}
                 }
             }
         },
         {
             "PutRequest": {
                 "Item": {
-                    "PK": {"S":"MobileUser-66749543-c6e2-4eb4-84bc-28c05ccd46ad"},
-                    "SK": {"S":"MobileUser-66749543-c6e2-4eb4-84bc-28c05ccd46ad"}
+                    "PK": {"S":"MobileUser-a5a11da4-a93f-436c-b845-b1cfc5bdf537"},
+                    "SK": {"S":"MobileUser-a5a11da4-a93f-436c-b845-b1cfc5bdf537"}
                 }
             }
         },
         {
             "PutRequest": {
                 "Item": {
-                    "PK": {"S":"MobileUser-66749543-c6e2-4eb4-84bc-28c05ccd46ad"},
-                    "SK": {"S":"mobileuser - 308 phone"}
+                    "PK": {"S":"MobileUser-a5a11da4-a93f-436c-b845-b1cfc5bdf537"},
+                    "SK": {"S":"mobileuser - 8034 phone"}
                 }
             }
         }
