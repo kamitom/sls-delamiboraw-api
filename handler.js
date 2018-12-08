@@ -24,7 +24,7 @@ exports.delamiboitems = (event, context, callback) => {
 
 		case 'delAmiboRawItems3': {
 
-			let Target_table = "dev2";
+			let Target_table = "Dev1";
 			// let Target_table = 'AmiboTb-Test-Tom2';
 
 			let cognitoUsr = event.arguments.phone;
