@@ -23,7 +23,7 @@ exports.delamiboitems = (event, context, callback) => {
 			break;
 		}
 
-		case 'delAmiboRawItems4': {
+		case 'delAmiboRawItems': {
 
 			//todo: dynamodb table name need modify: AmiboTable-Dev
 			let Target_table = "Dev1";
@@ -53,7 +53,7 @@ exports.delamiboitems = (event, context, callback) => {
 					callback(null, {'x2 error msg: ': err.message, 'param5: ': params5});
 					return;
 				} else {
-					console.log('show data5: ', JSON.stringify(cogUsrData, null, 2));
+					console.log('show cogUsr object: ', JSON.stringify(cogUsrData, null, 2));
 
 					const UserExists = (cogUsrData.Users.length);
 					if (UserExists > 0) {
@@ -278,57 +278,6 @@ exports.delamiboitems = (event, context, callback) => {
 			break;
 		}
 
-		case 'delAmiboCog': {
-
-			const client = new AWS.CognitoIdentityServiceProvider({
-					apiVersion: '2016-04-19',
-					region: 'us-east-1'
-				});
-
-			// const params2 = {
-			// 	// 'Username': `${event.cogUserName}`,
-			// 	'Username': consumerKey,
-			// 	// 'UserPoolId': 'us-east-2_VdUFUH85R' // tomcoon
-			// 	'UserPoolId': 'us-east-1_R5PVZBkQr' // tomcoon: cognito_sls_appsync_user_pool
-			// };
-			// client.adminDeleteUser(params2, (err, data) => {
-			// 	if (err) {
-			// 		// console.log(element, err.message);
-			// 		callback(err, {'fail': event.cogUserName, 'msg1': err.message});
-			// 	} else {
-			// 		callback(null, {'successful': 'deleted!!', 'Phone': event.arguments.cogUserName});
-			// 	}
-			// });
-
-			// begin test 1
-			const id_show = {mobile: 'mobile', device: 'device'};
-				
-				for (const key in id_show) {
-					if (id_show.hasOwnProperty(key)) {
-						let element = id_show[key];
-						const params = {
-							// 'Username': 'mobile+886971088033',
-							'Username': `${element}+${event.arguments.cogUserName}`,
-							'UserPoolId': 'us-east-1_mi3ZL9deF' // tomcoon: cognito_sls_appsync_user_pool
-							// 'UserPoolId': 'ap-southeast-1_ntfECmrjH' // amibo
-						};
-						
-						client.adminDeleteUser(params, (err, data) => {
-							let Username =  `${element}+${event.arguments.cogUserName}`;
-							if (err) {
-								// console.log(element, err.message);
-								callback(err, {'fail': event.arguments.cogUserName, 'msg100': err.message});
-							} else {
-								// console.log(element, ' deleted!! ',  {'successful': 'deleted!!', 'Username': Username});   
-								callback(null, {'successful': 'deleted!!', 'Phone': event.arguments.cogUserName});
-							}
-						});
-					}
-				}
-			// end test 1
-
-			break;
-		}
 
 		default: {
 			callback(`Unknown field, unable to resolve ${event.field}`, null);

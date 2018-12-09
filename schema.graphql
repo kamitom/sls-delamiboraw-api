@@ -1,5 +1,5 @@
 type Mutation {
-	delAmiboRawItems4(phone: String!): String
+	delAmiboRawItems(phone: String!): String
 }
 
 type Query {

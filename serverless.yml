@@ -1,4 +1,4 @@
-service: sls-delamiboraw-backend
+service: sls-appsync-delamiboraw-backend
 
 plugins:
    - serverless-appsync-plugin
@@ -9,7 +9,7 @@ provider:
   runtime: nodejs8.10
   stage: dev
   region: ap-northeast-2  # appsync region: 
-  # profile: itri-tomaws
+  # profile: itritomaws
 
 functions:
   graphql:
@@ -27,7 +27,7 @@ custom:
     mappingTemplates:
       - dataSource: awsLambdaDataSource
         type: Mutation #Query, Mutation, Subscription
-        field: delAmiboRawItems4
+        field: delAmiboRawItems
         request: "delamiboraw-request-mapping-template.txt"
         response: "delamiboraw-response-mapping-template.txt"
     schema: # defaults schema.graphql
