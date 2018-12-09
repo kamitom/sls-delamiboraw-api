@@ -1,10 +1,11 @@
 'use strict';
 const AWS = require('aws-sdk');
 
-//todo: cognito region need modify: ap-southeast-1
+//todo: cognito region need modify: ap-southeast-1; us-east-2
 const client = new AWS.CognitoIdentityServiceProvider({
 	apiVersion: '2016-04-19',
-	region: 'us-east-2'
+	region: 'ap-southeast-1'
+	// region: 'us-east-2'
 });
 
 
@@ -27,20 +28,22 @@ exports.delamiboitems = (event, context, callback) => {
 
 			//todo: dynamodb table name need modify: AmiboTable-Dev
 			let Target_table = "Dev1";
-			// let Target_table = 'AmiboTb-Test-Tom2';
+			// let Target_table = 'AmiboTable-Dev';
 
 			let cognitoUsr = event.arguments.phone;
 
-			//todo: dynamodb region need modify: ap-southeast-1
+			//todo: dynamodb region need modify: ap-southeast-1; test: us-east-1
 			const dynamodb = new AWS.DynamoDB({
-				region: 'us-east-1',
+				region: 'ap-southeast-1',
 				apiVersion: '2012-08-10'
+				// region: 'us-east-1',
 			});
 			
 			let mobile_sub2;
 			let device_sub2;
 			const params5 = {
-				'UserPoolId': 'us-east-2_VdUFUH85R', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH
+				// 'UserPoolId': 'us-east-2_VdUFUH85R', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH
+				'UserPoolId': 'ap-southeast-1_ntfECmrjH', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH
 				'Filter': `phone_number=\"+${event.arguments.phone}\"` // equals
 			};
 			
@@ -60,11 +63,11 @@ exports.delamiboitems = (event, context, callback) => {
 						for (let i = 0; i < cogUsrData.Users.length; i++) {
 							let cognitoUsername = cogUsrData.Users[i].Username;
 							if (cognitoUsername.startsWith('device')) {
-								// device_sub2 = 'Device-' + data5.Users[i].Attributes[1].Value;  //todo: 在正式區
-								device_sub2 = 'Device-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
+								device_sub2 = 'Device-' + cogUsrData.Users[i].Attributes[1].Value;  //todo: 在 itritomaws
+								// device_sub2 = 'Device-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
 							} else {
-								// mobile_sub2 = 'MobileUser-' + data5.Users[i].Attributes[1].Value;  //todo: 在正式區
-								mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
+								mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[1].Value;  //todo: 在 itritomaws
+								// mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
 							}
 			
 						}

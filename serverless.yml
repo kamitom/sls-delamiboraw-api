@@ -145,7 +145,7 @@ resources:
     AppSyncLambdaServiceRole:
       Type: "AWS::IAM::Role"
       Properties:
-        RoleName: "Lambda2-${self:custom.appSync.serviceRole}"
+        RoleName: "Lambda-delamibotbl-${self:custom.appSync.serviceRole}"
         AssumeRolePolicyDocument:
           Version: "2012-10-17"
           Statement:
@@ -156,7 +156,7 @@ resources:
               Action:
                 - "sts:AssumeRole"
         Policies:
-          - PolicyName: "Lambda2-${self:custom.appSync.serviceRole}-Policy"
+          - PolicyName: "Lambda-delamibotbl-${self:custom.appSync.serviceRole}-Policy"
             PolicyDocument:
               Version: "2012-10-17"
               Statement:
