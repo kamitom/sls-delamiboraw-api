@@ -18,7 +18,8 @@ functions:
 custom:
   accountId: #{AWS::AccountId}
   appSync:
-    name: sls-delamiboraw-api
+    # name: sls-delamiboraw-api
+    name: Amibo Delete Items
     authenticationType: API_KEY
     userPoolConfig:
       # awsRegion:  us-east-1

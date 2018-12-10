@@ -4,7 +4,7 @@ const AWS = require('aws-sdk');
 //todo: cognito region need modify: ap-southeast-1; us-east-2
 const client = new AWS.CognitoIdentityServiceProvider({
 	apiVersion: '2016-04-19',
-	region: 'ap-southeast-1'
+	region: 'ap-southeast-1'  // profile itritomaws
 	// region: 'us-east-2'
 });
 
@@ -27,8 +27,8 @@ exports.delamiboitems = (event, context, callback) => {
 		case 'delAmiboRawItems': {
 
 			//todo: dynamodb table name need modify: AmiboTable-Dev
-			let Target_table = "Dev1";
-			// let Target_table = 'AmiboTable-Dev';
+			// let Target_table = "Dev1";
+			let Target_table = 'AmiboTable-Dev';  // profile itritomaws
 
 			let cognitoUsr = event.arguments.phone;
 
@@ -43,7 +43,7 @@ exports.delamiboitems = (event, context, callback) => {
 			let device_sub2;
 			const params5 = {
 				// 'UserPoolId': 'us-east-2_VdUFUH85R', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH
-				'UserPoolId': 'ap-southeast-1_ntfECmrjH', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH
+				'UserPoolId': 'ap-southeast-1_ntfECmrjH', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH  profile itritomaws
 				'Filter': `phone_number=\"+${event.arguments.phone}\"` // equals
 			};
 			
@@ -52,11 +52,11 @@ exports.delamiboitems = (event, context, callback) => {
 			client.listUsers(params5, (err, cogUsrData) => {
 
 				if (err) {
-					console.error('errors: ' , err.message);
-					callback(null, {'x2 error msg: ': err.message, 'param5: ': params5});
+					console.error('error: ' , err.message);
+					callback(null, {'listUsers error msg: ': err.message, 'param5: ': params5});
 					return;
 				} else {
-					console.log('show cogUsr object: ', JSON.stringify(cogUsrData, null, 2));
+					console.log('cogUsr object: ', JSON.stringify(cogUsrData, null, 2));
 
 					const UserExists = (cogUsrData.Users.length);
 					if (UserExists > 0) {
@@ -89,14 +89,14 @@ exports.delamiboitems = (event, context, callback) => {
 							};
 							dynamodb.query(params411, function (err, data4) {
 								if (err) {
-									console.error("Unable to read item. Error JSON: ", JSON.stringify(err, null, 2));
-									callback(null, {'t2 error params411: ': err.message});
+									console.error('params411 - Unable to read item. Error JSON: ', JSON.stringify(err, null, 2));
+									callback(null, {'User has no Amibo Device Data': event.arguments.phone});
 									return;
 								} else {
 									const DeviceCount = data4.Items.length;
-									console.log("QUERY Device- PK - succeeded: ", JSON.stringify(data4, null, 2));
-									console.log('device count: ', DeviceCount);
-									console.log('show params411: ', params411);
+									// console.log("QUERY Device- PK - succeeded: ", JSON.stringify(data4, null, 2));
+									// console.log('device count: ', DeviceCount);
+									// console.log('show params411: ', params411);
 			
 									if (DeviceCount > 0 ) {
 										let item4;
@@ -142,7 +142,7 @@ exports.delamiboitems = (event, context, callback) => {
 											dynamodb.deleteItem(params412_1, function(err, data4_1){
 												if (err) {
 													console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-													callback(null, {'error params412_1: ': err.message});
+													callback(null, {'deleteItem Error params412_1: ': err.message});
 												} else {
 													// console.log("delete Device - PK - succeeded:", JSON.stringify(data4_1, null, 2));
 												}
@@ -166,7 +166,7 @@ exports.delamiboitems = (event, context, callback) => {
 										callback(null, {"mobile": cognitoUsr, "device_sub": device_sub2, "status": 'deleted!'});
 									} else 
 									{
-										callback(null, {'no device reord': 0});
+										callback(null, {'no amibo reord': 0});
 									}
 								}
 							});
@@ -183,7 +183,7 @@ exports.delamiboitems = (event, context, callback) => {
 							dynamodb.query(params311, function (err, data2) {
 								if (err) {
 									console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-									callback(null, {'error params311: ': err.message});
+									callback(null, {'User has no amibo mobile data': event.arguments.phone});
 									return;
 								} else {
 									objMobileUser = Object.assign({}, data2);
@@ -239,7 +239,7 @@ exports.delamiboitems = (event, context, callback) => {
 											dynamodb.deleteItem(params312_1, function(err, data1_1){
 												if (err) {
 													console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-													callback(null, {'error params312_1: ': err.message});
+													callback(null, {'deleteItem Error params312_1: ': err.message});
 													return;
 												} else {
 													console.log("delete MobileUser - PK - succeeded:", JSON.stringify(data1_1, null, 2));
@@ -264,7 +264,7 @@ exports.delamiboitems = (event, context, callback) => {
 										// todo: batchWriteItem -- 
 										callback(null, {"mobile": cognitoUsr, "mobile_sub": mobile_sub2, "status": 'deleted!'});
 									} else {
-										callback(null, {'no mobile record: ': 0});
+										callback(null, {'no amibo record: ': 0});
 									}
 								}
 							});
