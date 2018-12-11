@@ -27,7 +27,6 @@ exports.delamiboitems = (event, context, callback) => {
 		case 'delAmiboRawItems': {
 
 			//todo: dynamodb table name need modify: AmiboTable-Dev
-			// let Target_table = "Dev1";
 			let Target_table = 'AmiboTable-Dev';  // profile itritomaws
 
 			let cognitoUsr = event.arguments.phone;
@@ -36,7 +35,6 @@ exports.delamiboitems = (event, context, callback) => {
 			const dynamodb = new AWS.DynamoDB({
 				region: 'ap-southeast-1',
 				apiVersion: '2012-08-10'
-				// region: 'us-east-1',
 			});
 			
 			let mobile_sub2;
@@ -72,8 +70,8 @@ exports.delamiboitems = (event, context, callback) => {
 								// mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[1].Value;  //todo: 在 itritomaws
 								mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
 							}
-			
 						}
+
 						// delete PK -- MobileUser- begin
 						let objMobileUser;
 						let itemsArray1 = []; 
@@ -81,7 +79,6 @@ exports.delamiboitems = (event, context, callback) => {
 						let itemsArray4 = [];
 						let itemsArray4_1 = [];
 						{
-
 							//delete begin: DeviceUser-XXXXXX
 							{
 								var params411_1 = {
@@ -261,39 +258,52 @@ exports.delamiboitems = (event, context, callback) => {
 							}
 							//delete end: Device-XXXXXX
 			
-							var params311 = {
-								ExpressionAttributeValues: {
-									":v1": {
-										S: mobile_sub2
-									}
-								},
-								KeyConditionExpression: "PK = :v1",
-								TableName: Target_table
-							};
-							dynamodb.query(params311, function (err, data2) {
-								if (err) {
-									console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-									callback(null, {'Query Alert. User has no amibo mobile data': event.arguments.phone, 'Error': JSON.stringify(err, null, 2)});
-									return;
-								} else {
-									objMobileUser = Object.assign({}, data2);
-									console.log("QUERY MobileUser- PK - succeeded:", JSON.stringify(data2, null, 2));
-									
-									const mobileUserCount = (objMobileUser.Items.length); 
-									// console.log('mobileUser Count is : ' + mobileUserCount);
-			
-									if (mobileUserCount > 0) {
-										let item2;
-										let item2_1;
-										let WhatINeed;
-										for (let index = 0; index < objMobileUser.Items.length; index++) {
+							//delete begin: MobileUser-XXXXXX
+							{
+								var params311 = {
+									ExpressionAttributeValues: {
+										":v1": {
+											S: mobile_sub2
+										}
+									},
+									KeyConditionExpression: "PK = :v1",
+									TableName: Target_table
+								};
+								dynamodb.query(params311, function (err, data2) {
+									if (err) {
+										console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+										callback(null, {'Query Alert. User has no amibo mobile data': event.arguments.phone, 'Error': JSON.stringify(err, null, 2)});
+										return;
+									} else {
+										objMobileUser = Object.assign({}, data2);
+										console.log("QUERY MobileUser- PK - succeeded:", JSON.stringify(data2, null, 2));
+										
+										const mobileUserCount = (objMobileUser.Items.length); 
+										// console.log('mobileUser Count is : ' + mobileUserCount);
 				
-											// todo start
-											// console.log(objTest.Items[index]);
-											WhatINeed = (objMobileUser.Items[index]);
-											// console.log(WhatINeed.PK, WhatINeed.SK);
-											item2 = {
-												DeleteRequest: {
+										if (mobileUserCount > 0) {
+											let item2;
+											let item2_1;
+											let WhatINeed;
+											for (let index = 0; index < objMobileUser.Items.length; index++) {
+					
+												// todo start
+												// console.log(objTest.Items[index]);
+												WhatINeed = (objMobileUser.Items[index]);
+												// console.log(WhatINeed.PK, WhatINeed.SK);
+												item2 = {
+													DeleteRequest: {
+														Key: {
+															'PK': {
+																S: WhatINeed.PK.S
+															},
+															'SK': {
+																S: WhatINeed.SK.S
+															}
+														},
+													},
+												};
+												item2_1 = {
 													Key: {
 														'PK': {
 															S: WhatINeed.PK.S
@@ -302,64 +312,54 @@ exports.delamiboitems = (event, context, callback) => {
 															S: WhatINeed.SK.S
 														}
 													},
-												},
-											};
-											item2_1 = {
-												Key: {
-													'PK': {
-														S: WhatINeed.PK.S
-													},
-													'SK': {
-														S: WhatINeed.SK.S
+													TableName: Target_table, 
+												};
+				
+												itemsArray1.push(item2);
+												itemsArray1_1.push(item2_1);
+												
+												// todo end
+											}
+				
+											itemsArray1_1.forEach(element1 => {
+												var params312_1 = element1;
+												console.log(params312_1);
+												//todo: deleteitem begin
+												dynamodb.deleteItem(params312_1, function(err, data1_1){
+													if (err) {
+														console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+														callback(null, {'deleteItem Error params312_1: ': err.message});
+														return;
+													} else {
+														console.log("delete MobileUser - PK - succeeded:", JSON.stringify(data1_1, null, 2));
 													}
-												},
-												TableName: Target_table, 
-											};
-			
-											itemsArray1.push(item2);
-											itemsArray1_1.push(item2_1);
-											
-											// todo end
-										}
-			
-										itemsArray1_1.forEach(element1 => {
-											var params312_1 = element1;
-											console.log(params312_1);
-											//todo: deleteitem begin
-											dynamodb.deleteItem(params312_1, function(err, data1_1){
-												if (err) {
-													console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-													callback(null, {'deleteItem Error params312_1: ': err.message});
-													return;
-												} else {
-													console.log("delete MobileUser - PK - succeeded:", JSON.stringify(data1_1, null, 2));
-												}
+												});
+												//todo: deleteitem end
 											});
-											//todo: deleteitem end
-										});
-
-										// todo: batchWriteItem -- 
-										// var params312 = {
-										// 	RequestItems: {
-										// 		'AmiboTb-Test-Tom1': itemsArray1
-										// 	}
-										// };
-										// dynamodb.batchWriteItem(params312, function (err, data) {
-										//     if (err) {
-										//         console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-										//     } else {
-										//         console.log("delete MobileUser - PK - succeeded:", JSON.stringify(data, null, 2));
-										//     }
-										// });
-										// todo: batchWriteItem -- 
-										callback(null, {"mobile": cognitoUsr, "mobile_sub": mobile_sub2, "status": 'deleted!'});
-									} else {
-										callback(null, {'no amibo(mobile) record: ': 0});
+	
+											// todo: batchWriteItem -- 
+											// var params312 = {
+											// 	RequestItems: {
+											// 		'AmiboTb-Test-Tom1': itemsArray1
+											// 	}
+											// };
+											// dynamodb.batchWriteItem(params312, function (err, data) {
+											//     if (err) {
+											//         console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+											//     } else {
+											//         console.log("delete MobileUser - PK - succeeded:", JSON.stringify(data, null, 2));
+											//     }
+											// });
+											// todo: batchWriteItem -- 
+											callback(null, {"mobile": cognitoUsr, "mobile_sub": mobile_sub2, "status": 'deleted!'});
+										} else {
+											callback(null, {'no amibo(mobile) record: ': 0});
+										}
 									}
-								}
-							});
+								});
+							}
+							//delete end: MobileUser-XXXXXX
 						}
-						
 					}
 					else {
 						console.log(`User: ${cognitoUsr} does not exist.`);
