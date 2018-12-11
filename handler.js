@@ -4,8 +4,8 @@ const AWS = require('aws-sdk');
 //todo: cognito region need modify: ap-southeast-1; us-east-2
 const client = new AWS.CognitoIdentityServiceProvider({
 	apiVersion: '2016-04-19',
-	region: 'ap-southeast-1'  // profile itritomaws
-	// region: 'us-east-2'
+	// region: 'ap-southeast-1'  // profile itritomaws
+	region: 'us-east-2' // profile tomrd
 });
 
 
@@ -41,9 +41,10 @@ exports.delamiboitems = (event, context, callback) => {
 			
 			let mobile_sub2;
 			let device_sub2;
+			let device_sub2_User;
 			const params5 = {
-				// 'UserPoolId': 'us-east-2_VdUFUH85R', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH
-				'UserPoolId': 'ap-southeast-1_ntfECmrjH', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH  profile itritomaws
+				'UserPoolId': 'us-east-2_VdUFUH85R', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH
+				// 'UserPoolId': 'ap-southeast-1_ntfECmrjH', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH  profile itritomaws
 				'Filter': `phone_number=\"+${event.arguments.phone}\"` // equals
 			};
 			
@@ -63,11 +64,13 @@ exports.delamiboitems = (event, context, callback) => {
 						for (let i = 0; i < cogUsrData.Users.length; i++) {
 							let cognitoUsername = cogUsrData.Users[i].Username;
 							if (cognitoUsername.startsWith('device')) {
-								device_sub2 = 'Device-' + cogUsrData.Users[i].Attributes[1].Value;  //todo: 在 itritomaws
-								// device_sub2 = 'Device-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
+								// device_sub2 = 'Device-' + cogUsrData.Users[i].Attributes[1].Value;  //todo: 在 itritomaws
+								// device_sub2_User = 'DeviceUser-' + cogUsrData.Users[i].Attributes[1].Value;    //todo: 在 itritomaws
+								device_sub2 = 'Device-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
+								device_sub2_User = 'DeviceUser-' + cogUsrData.Users[i].Attributes[0].Value;   //todo: 在tomrd
 							} else {
-								mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[1].Value;  //todo: 在 itritomaws
-								// mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
+								// mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[1].Value;  //todo: 在 itritomaws
+								mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
 							}
 			
 						}
@@ -78,37 +81,51 @@ exports.delamiboitems = (event, context, callback) => {
 						let itemsArray4 = [];
 						let itemsArray4_1 = [];
 						{
-							var params411 = {
-								ExpressionAttributeValues: {
-									":v2": {
-										S: device_sub2
-									}
-								},
-								KeyConditionExpression: "PK = :v2",
-								TableName: Target_table
-							};
-							dynamodb.query(params411, function (err, data4) {
-								if (err) {
-									console.error('params411 - Unable to read item. Error JSON: ', JSON.stringify(err, null, 2));
-									callback(null, {'User has no Amibo Device Data': event.arguments.phone});
-									return;
-								} else {
-									const DeviceCount = data4.Items.length;
-									// console.log("QUERY Device- PK - succeeded: ", JSON.stringify(data4, null, 2));
-									// console.log('device count: ', DeviceCount);
-									// console.log('show params411: ', params411);
+
+							//delete begin: DeviceUser-XXXXXX
+							{
+								var params411_1 = {
+									ExpressionAttributeValues: {
+										":v2_1": {
+											S: device_sub2_User
+										},
+									},
+									KeyConditionExpression: "PK = :v2_1",
+									TableName: Target_table
+								};
+								dynamodb.query(params411_1, function (err, data4_1) {
+									if (err) {
+										console.error('params411 - Unable to read item. Error JSON: ', JSON.stringify(err, null, 2));
+										callback(null, {'Query Alert. User has no Amibo Device Data': event.arguments.phone, 'Error': JSON.stringify(err, null, 2)});
+										return;
+									} else {
+										const DeviceCount_1 = data4_1.Items.length;
+										console.log("QUERY Device- PK - succeeded: ", JSON.stringify(data4_1, null, 2));
+										// console.log('device count: ', DeviceCount);
+										console.log('Debug params411_1:', JSON.stringify(params411_1, null,2));
 			
-									if (DeviceCount > 0 ) {
-										let item4;
-										let item4_1;
-										let WhatINeed4;
-										for (let index = 0; index < data4.Items.length; index++) {
-											// const element = array[index];
-											WhatINeed4 = data4.Items[index];
-											// console.log(WhatINeed4.PK, WhatINeed4.SK);
-											// console.log('------');
-											item4 = {
-												DeleteRequest: {
+										if (DeviceCount_1 > 0 ) {
+											let item4;
+											let item4_1;
+											let WhatINeed4;
+											for (let index = 0; index < data4_1.Items.length; index++) {
+												// const element = array[index];
+												WhatINeed4 = data4_1.Items[index];
+												// console.log(WhatINeed4.PK, WhatINeed4.SK);
+												// console.log('------');
+												item4 = {
+													DeleteRequest: {
+														Key: {
+															'PK': {
+																S: WhatINeed4.PK.S
+															},
+															'SK': {
+																S: WhatINeed4.SK.S
+															}
+														},
+													},
+												};
+												item4_1 = {
 													Key: {
 														'PK': {
 															S: WhatINeed4.PK.S
@@ -117,59 +134,132 @@ exports.delamiboitems = (event, context, callback) => {
 															S: WhatINeed4.SK.S
 														}
 													},
-												},
-											};
-											item4_1 = {
-												Key: {
-													'PK': {
-														S: WhatINeed4.PK.S
-													},
-													'SK': {
-														S: WhatINeed4.SK.S
-													}
-												},
-												TableName: Target_table,
-											};
-											itemsArray4.push(item4);
-											itemsArray4_1.push(item4_1);
-										}
-			
-										itemsArray4_1.forEach(element4 => {
-											// console.log(element);
-											var params412_1 = element4;
-											// console.log(params412_1);
-											//deleteitem
-											dynamodb.deleteItem(params412_1, function(err, data4_1){
-												if (err) {
-													console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-													callback(null, {'deleteItem Error params412_1: ': err.message});
-												} else {
-													// console.log("delete Device - PK - succeeded:", JSON.stringify(data4_1, null, 2));
-												}
-											});
-										});
+													TableName: Target_table,
+												};
+												itemsArray4.push(item4);
+												itemsArray4_1.push(item4_1);
+											}
 				
-										// var params412 = {
-										// 	RequestItems: {
-										// 		'AmiboTb-Test-Tom1': itemsArray4
-										// 	}
-										// };
-			
-										// console.log(params412);
-										// dynamodb.batchWriteItem(params412, function (err, data) {
-										//     if (err) {
-										//         console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-										//     } else {
-										//         console.log("delete Device - PK - succeeded:", JSON.stringify(data, null, 2));
-										//     }
-										// });
-										callback(null, {"mobile": cognitoUsr, "device_sub": device_sub2, "status": 'deleted!'});
-									} else 
-									{
-										callback(null, {'no amibo reord': 0});
+											itemsArray4_1.forEach(element4 => {
+												// console.log(element);
+												var params412_1_1 = element4;
+												// console.log(params412_1);
+												//deleteitem
+												dynamodb.deleteItem(params412_1_1, function(err, data4_1){
+													if (err) {
+														console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+														callback(null, {'deleteItem Error params412_1: ': err.message});
+													} else {
+														// console.log("delete Device - PK - succeeded:", JSON.stringify(data4_1, null, 2));
+													}
+												});
+											});
+											callback(null, {"mobile": cognitoUsr, "device_sub": device_sub2_User, "status": 'deleted!'});
+										} else 
+										{
+											callback(null, {'no amibo(device) reord': 0});
+										}
 									}
-								}
-							});
+								});
+							}
+							//delete end: DeviceUser-XXXXXX
+
+							//delete begin: Device-XXXXXX
+							{
+								var params411 = {
+									ExpressionAttributeValues: {
+										":v2": {
+											S: device_sub2
+										},
+									},
+									KeyConditionExpression: "PK = :v2",
+									TableName: Target_table
+								};
+								dynamodb.query(params411, function (err, data4) {
+									if (err) {
+										console.error('params411 - Unable to read item. Error JSON: ', JSON.stringify(err, null, 2));
+										callback(null, {'Query Alert. User has no Amibo Device Data': event.arguments.phone, 'Error': JSON.stringify(err, null, 2)});
+										return;
+									} else {
+										const DeviceCount = data4.Items.length;
+										console.log("QUERY Device- PK - succeeded: ", JSON.stringify(data4, null, 2));
+										// console.log('device count: ', DeviceCount);
+										console.log('Debug params411:', JSON.stringify(params411, null,2));
+				
+										if (DeviceCount > 0 ) {
+											let item4;
+											let item4_1;
+											let WhatINeed4;
+											for (let index = 0; index < data4.Items.length; index++) {
+												// const element = array[index];
+												WhatINeed4 = data4.Items[index];
+												// console.log(WhatINeed4.PK, WhatINeed4.SK);
+												// console.log('------');
+												item4 = {
+													DeleteRequest: {
+														Key: {
+															'PK': {
+																S: WhatINeed4.PK.S
+															},
+															'SK': {
+																S: WhatINeed4.SK.S
+															}
+														},
+													},
+												};
+												item4_1 = {
+													Key: {
+														'PK': {
+															S: WhatINeed4.PK.S
+														},
+														'SK': {
+															S: WhatINeed4.SK.S
+														}
+													},
+													TableName: Target_table,
+												};
+												itemsArray4.push(item4);
+												itemsArray4_1.push(item4_1);
+											}
+				
+											itemsArray4_1.forEach(element4 => {
+												// console.log(element);
+												var params412_1 = element4;
+												// console.log(params412_1);
+												//deleteitem
+												dynamodb.deleteItem(params412_1, function(err, data4_1){
+													if (err) {
+														console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+														callback(null, {'deleteItem Error params412_1: ': err.message});
+													} else {
+														// console.log("delete Device - PK - succeeded:", JSON.stringify(data4_1, null, 2));
+													}
+												});
+											});
+					
+											// var params412 = {
+											// 	RequestItems: {
+											// 		'AmiboTb-Test-Tom1': itemsArray4
+											// 	}
+											// };
+				
+											// console.log(params412);
+											// dynamodb.batchWriteItem(params412, function (err, data) {
+											//     if (err) {
+											//         console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+											//     } else {
+											//         console.log("delete Device - PK - succeeded:", JSON.stringify(data, null, 2));
+											//     }
+											// });
+											callback(null, {"mobile": cognitoUsr, "device_sub": device_sub2, "status": 'deleted!'});
+										} else 
+										{
+											callback(null, {'no amibo(device) reord': 0});
+										}
+									}
+								});
+							}
+							//delete end: Device-XXXXXX
 			
 							var params311 = {
 								ExpressionAttributeValues: {
@@ -183,7 +273,7 @@ exports.delamiboitems = (event, context, callback) => {
 							dynamodb.query(params311, function (err, data2) {
 								if (err) {
 									console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-									callback(null, {'User has no amibo mobile data': event.arguments.phone});
+									callback(null, {'Query Alert. User has no amibo mobile data': event.arguments.phone, 'Error': JSON.stringify(err, null, 2)});
 									return;
 								} else {
 									objMobileUser = Object.assign({}, data2);
@@ -264,7 +354,7 @@ exports.delamiboitems = (event, context, callback) => {
 										// todo: batchWriteItem -- 
 										callback(null, {"mobile": cognitoUsr, "mobile_sub": mobile_sub2, "status": 'deleted!'});
 									} else {
-										callback(null, {'no amibo record: ': 0});
+										callback(null, {'no amibo(mobile) record: ': 0});
 									}
 								}
 							});
