@@ -4,8 +4,8 @@ const AWS = require('aws-sdk');
 //todo: cognito region need modify: ap-southeast-1; us-east-2
 const client = new AWS.CognitoIdentityServiceProvider({
 	apiVersion: '2016-04-19',
-	// region: 'ap-southeast-1'  // profile itritomaws
-	region: 'us-east-2' // profile tomrd
+	region: 'ap-southeast-1'  // profile itritomaws & tomrd
+	// region: 'us-east-2' // profile tomrd
 });
 
 
@@ -41,10 +41,11 @@ exports.delamiboitems = (event, context, callback) => {
 			let device_sub2;
 			let device_sub2_User;
 			const params5 = {
-				'UserPoolId': 'us-east-2_VdUFUH85R', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH
 				// 'UserPoolId': 'ap-southeast-1_ntfECmrjH', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH  profile itritomaws
+				'UserPoolId': 'ap-southeast-1_5jWRLaKaW', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH  profile tomrd
 				'Filter': `phone_number=\"+${event.arguments.phone}\"` // equals
-			};
+			}; //ap-southeast-1_5jWRLaKaW
+
 			
 			console.log('show params5: ', params5);
 
@@ -92,12 +93,12 @@ exports.delamiboitems = (event, context, callback) => {
 								};
 								dynamodb.query(params411_1, function (err, data4_1) {
 									if (err) {
-										console.error('params411 - Unable to read item. Error JSON: ', JSON.stringify(err, null, 2));
+										console.error('params411_1 - Unable to read item. Error JSON: ', JSON.stringify(err, null, 2));
 										callback(null, {'Query Alert. User has no Amibo Device Data': event.arguments.phone, 'Error': JSON.stringify(err, null, 2)});
 										return;
 									} else {
 										const DeviceCount_1 = data4_1.Items.length;
-										console.log("QUERY Device- PK - succeeded: ", JSON.stringify(data4_1, null, 2));
+										console.log("QUERY DeviceUser - PK - succeeded: ", JSON.stringify(data4_1, null, 2));
 										// console.log('device count: ', DeviceCount);
 										console.log('Debug params411_1:', JSON.stringify(params411_1, null,2));
 			
@@ -154,7 +155,7 @@ exports.delamiboitems = (event, context, callback) => {
 											callback(null, {"mobile": cognitoUsr, "device_sub": device_sub2_User, "status": 'deleted!'});
 										} else 
 										{
-											callback(null, {'no amibo(device) reord': 0});
+											callback(null, {'no amibo(DeviceUser) reord': 0});
 										}
 									}
 								});

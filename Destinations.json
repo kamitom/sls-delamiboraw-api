@@ -43,6 +43,14 @@
         {
             "PutRequest": {
                 "Item": {
+                    "PK": {"S":"DeviceUser-d4417c9a-1dba-4e60-a7ac-78c2372d7d93"},
+                    "SK": {"S":"deviceUser -second item test"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
                     "PK": {"S":"MobileUser-69d10799-b8a4-4c43-9d39-0e00f6f5eae8"},
                     "SK": {"S":"MobileUser-69d10799-b8a4-4c43-9d39-0e00f6f5eae8"}
                 }
