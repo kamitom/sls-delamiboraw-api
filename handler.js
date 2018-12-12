@@ -41,8 +41,8 @@ exports.delamiboitems = (event, context, callback) => {
 			let device_sub2;
 			let device_sub2_User;
 			const params5 = {
-				// 'UserPoolId': 'ap-southeast-1_ntfECmrjH', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH  profile itritomaws
-				'UserPoolId': 'ap-southeast-1_5jWRLaKaW', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH  profile tomrd
+				'UserPoolId': 'ap-southeast-1_ntfECmrjH', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH  profile itritomaws
+				// 'UserPoolId': 'ap-southeast-1_5jWRLaKaW', //todo: userpoolID region need modify: ap-southeast-1_ntfECmrjH  profile tomrd
 				'Filter': `phone_number=\"+${event.arguments.phone}\"` // equals
 			}; //ap-southeast-1_5jWRLaKaW
 
@@ -63,13 +63,13 @@ exports.delamiboitems = (event, context, callback) => {
 						for (let i = 0; i < cogUsrData.Users.length; i++) {
 							let cognitoUsername = cogUsrData.Users[i].Username;
 							if (cognitoUsername.startsWith('device')) {
-								// device_sub2 = 'Device-' + cogUsrData.Users[i].Attributes[1].Value;  //todo: 在 itritomaws
-								// device_sub2_User = 'DeviceUser-' + cogUsrData.Users[i].Attributes[1].Value;    //todo: 在 itritomaws
-								device_sub2 = 'Device-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
-								device_sub2_User = 'DeviceUser-' + cogUsrData.Users[i].Attributes[0].Value;   //todo: 在tomrd
+								device_sub2 = 'Device-' + cogUsrData.Users[i].Attributes[1].Value;  //todo: 在 itritomaws
+								device_sub2_User = 'DeviceUser-' + cogUsrData.Users[i].Attributes[1].Value;    //todo: 在 itritomaws
+								// device_sub2 = 'Device-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
+								// device_sub2_User = 'DeviceUser-' + cogUsrData.Users[i].Attributes[0].Value;   //todo: 在tomrd
 							} else {
-								// mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[1].Value;  //todo: 在 itritomaws
-								mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
+								mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[1].Value;  //todo: 在 itritomaws
+								// mobile_sub2 = 'MobileUser-' + cogUsrData.Users[i].Attributes[0].Value;  //todo: 在tomrd
 							}
 						}
 
